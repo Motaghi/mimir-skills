@@ -1,0 +1,12 @@
+# One extended-regex pattern per line. Lines starting with # are ignored.
+# Each line is an extended-regex alternative: `.` `+` `(` `)` need escaping to match themselves, and `|` inside a line would alternate within it.
+# Starter list of stock phrases that read as machine-written. Replace it with your own house style.
+\bleverage\b
+\bstreamline\b
+\bdelve\b
+\bnavigate\b
+\bfoster\b
+\brobust\b
+\bcomprehensive\b
+cutting-edge
+game-changer
