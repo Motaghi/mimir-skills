@@ -274,7 +274,7 @@ Author: Kun Chen
 Repository: https://github.com/kunchenguid/no-mistakes
 Pinned commit: 1aaa31d5d171c542f09acd6d506881447fc9f177
 Licence: MIT License, Copyright (c) 2026 Kun Chen
-Our change: Copied the upstream skill file unchanged and added only two sections. The Local contract section adds these rules: explicit request only; one gated push of the current branch and nothing beyond it; start with an intent and a default skip of document, pr and ci; document skipped by default because it edits documentation and applies its own fixes; no init or update; no branch moves in shared trees; pr and ci only on request; task-first mode that commits exact paths before the run; and --yes only when the user asked for an unattended run. The final Credit section names Kun Chen and the upstream repository.
+Our change: Added two sections, replaced the frontmatter description and marked two upstream paragraphs as superseded; the rest of the file is upstream text. The Local contract section adds these rules: name-only request; one gated push of the current branch and nothing beyond it; start with an intent and a default skip of document, pr and ci; document skipped by default because it edits documentation and applies its own fixes; no init or update; no branch moves in shared trees; pr and ci only on request; task-first mode that commits exact paths before the run; and --yes only when the user asked for an unattended run. The final Credit section names Kun Chen and the upstream repository. The description is name-only, with run intent required and the accepted spellings listed. The upstream "create a feature branch first" and "no-mistakes init" paragraphs carry the marker "superseded by the Local contract".
 
 ## Ideas drawn on
 

@@ -1,6 +1,6 @@
 ---
 name: no-mistakes
-description: Validate your code changes through the no-mistakes pipeline - automated code review, tests, lint, docs, push, PR, and CI - before they reach the configured push target. Use when the user asks to run no-mistakes, gate or ship or validate their changes, push safely, asks you to do a task and then validate it, or invokes /no-mistakes.
+description: Run the no-mistakes push gate. Use only when the user names it with run intent, such as "run no-mistakes", "use no mistakes", "gate this with no-mistake", "run it through nomistakes" or /no-mistakes. Accepted spellings are no-mistakes, no mistakes, nomistakes, no-mistake, no mistake, not mistakes and not mistake. Words without run intent, such as "that is not a mistake", are not a request.
 user-invocable: true
 ---
 
@@ -38,14 +38,17 @@ flags yourself - for example, "skip the lint step" becomes `--skip=lint`. Run
 ## Local contract
 
 These rules are our additions. They override the upstream text wherever they
-conflict. Outside this section and the final Credit section, this file is
-upstream text.
+conflict. Our local changes are the frontmatter description, the two upstream
+paragraphs marked "superseded by the Local contract", this section and the
+final Credit section; everything else in this file is upstream text.
 
-- **Explicit request only.** Start a run only when the user invokes this skill
-  by name or asks in words to run no-mistakes. "Validate", "ship" or "push
-  safely" alone is not a request. The frontmatter description below is
-  upstream's and is wider than this rule; follow this rule, and where your host
-  allows it, make the skill explicit-invocation only.
+- **Name-only request.** Start a run only when the user names this skill with
+  run intent ("run", "use", "through", "gate" or the slash form), in any of the
+  spellings the description lists: no-mistakes, no mistakes, nomistakes,
+  no-mistake, no mistake, not mistakes or not mistake. "Validate", "ship" or
+  "push safely" alone is not a request, and neither is a sentence that only
+  contains the words, such as "that is not a mistake". No host-level
+  explicit-invocation flag is needed; the description carries the rule.
 - **What the request covers.** One gated push of the current branch through
   the gate to its configured push target, for this run. It does not cover
   opening a PR, CI monitoring, a merge, pushing another branch, or any push
@@ -55,6 +58,18 @@ upstream text.
   branch. Do not start through a push wrapper script or a plain `git push`: a
   run started by a plain push records no intent, and a later
   `axi run --intent` attaches to it without adding one.
+- **Flags and parked runs.** Skip requests are added to the default list;
+  only the pr, ci and document rules remove entries from it. "Skip the lint
+  step" becomes `--skip=document,pr,ci,lint`. For a run this request did not
+  start, bind every step to the inspected run: inspect it with
+  `no-mistakes axi status --run <id>` and answer a parked gate with
+  `no-mistakes axi respond --run <id>`. Before each step, check the run's
+  recorded intent, enabled steps, submitted head, branch and target against
+  what this request authorized. Apply the same check before `axi answer`,
+  `no-mistakes rerun` and reattaching through `axi run`, which resolve the run
+  implicitly. If a command cannot bind to the inspected run, or the run's
+  remaining effects cannot be verified or fall outside this request, stop and
+  ask the user.
 - **`document` is skipped by default.** The document step edits documentation
   and applies fixes of its own, which a request to push the current work did
   not ask for. Enable it only on request, by dropping it from `--skip`, and say
@@ -66,7 +81,9 @@ upstream text.
 - **No branch moves in shared trees.** In a working tree other sessions may
   use, never create, switch or rebase branches in place. If the gate refuses
   the current branch, stop and report; offer a separate worktree and wait for
-  a yes. This replaces the upstream advice to create a feature branch.
+  a yes. `axi sync` can move the local branch with reset semantics, so it also
+  needs a yes first. This replaces the upstream advice to create a feature
+  branch.
 - **pr and ci.** Enable them only on request, by dropping the step from
   `--skip`. With `ci` enabled, the CI monitor may rebase and re-push the same
   branch until its PR is merged, closed or idles out; say so before enabling
@@ -94,6 +111,7 @@ task along with the command:
      a feature branch**. If the user is on the repository's default branch,
      create a feature branch first - the gate validates committed history on a
      non-default branch, so the work must land there before you run.
+     (superseded by the Local contract)
   3. **Then validate**, passing the user's task as explicit intent. The task
      text is exactly what the user set out to accomplish, in their own words, so
      it *is* the intent - preserve requirements stated directly by the user,
@@ -160,7 +178,7 @@ If any of these is not met, `axi run` returns an `error:` with the exact command
 to fix it - read it and act on it (commit your work, or create a branch). If the
 repository is not initialized, run `no-mistakes init` first; if the `no-mistakes`
 command itself is missing or misbehaving, `no-mistakes doctor` reports what is
-wrong.
+wrong. (superseded by the Local contract)
 Before starting, run `no-mistakes axi` (home view).
 If it shows an active run on your current branch, inspect it with `no-mistakes axi status`.
 If it is parked at a gate, drive it with `no-mistakes axi respond`.
